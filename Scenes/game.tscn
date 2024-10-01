@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://duhmm8irl0dej"]
+
+[ext_resource type="Script" path="res://Scenes/game.gd" id="1_aw7ge"]
+[ext_resource type="PackedScene" uid="uid://d2fnbqh7dhuyj" path="res://Scenes/board.tscn" id="1_j17sq"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_aw7ge")
+
+[node name="board" parent="." instance=ExtResource("1_j17sq")]
+unique_name_in_owner = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(64, 64)
+ignore_rotation = false
+zoom = Vector2(3, 3)
+
+[connection signal="ready" from="board" to="." method="_on_board_ready"]
