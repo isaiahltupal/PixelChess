@@ -1,10 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://cxe2epeoaqfon"]
+[gd_scene load_steps=3 format=3 uid="uid://cxe2epeoaqfon"]
 
 [ext_resource type="Script" path="res://Scenes/piece.gd" id="1_rwm1i"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_5lykk"]
-
-[sub_resource type="ImageTexture" id="ImageTexture_gtl3l"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b10eo"]
+size = Vector2(8, 12)
 
 [node name="piece" type="Node2D"]
 script = ExtResource("1_rwm1i")
@@ -12,10 +11,13 @@ script = ExtResource("1_rwm1i")
 [node name="Area2D" type="Area2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
-shape = SubResource("RectangleShape2D_5lykk")
+z_index = 1
+shape = SubResource("RectangleShape2D_b10eo")
+one_way_collision_margin = 0.0
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = SubResource("ImageTexture_gtl3l")
+unique_name_in_owner = true
+z_index = 5
 
 [connection signal="tree_entered" from="." to="." method="_on_tree_entered"]
 [connection signal="mouse_entered" from="Area2D" to="." method="_on_area_2d_mouse_entered"]

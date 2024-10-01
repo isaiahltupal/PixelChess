@@ -11,7 +11,7 @@ var MapPosition:Vector2i
 var game: Game
 var ValidGridLoation = []
 var spritePATH = "res://Assets/whitepiece.png"
-
+var isOnHover:bool = false
 
 func _ready() -> void:
 	pass	
@@ -63,12 +63,15 @@ func isValidTile(selectedPosition:Vector2i)->bool:
 	return true
 
 func _on_area_2d_mouse_entered() -> void:
-	if isEnemy(self.game.PlayerTurn):
+	if !isEnemy(self.game.PlayerTurn):
 		self.display_valid_moves.emit(self.getValidPosiiton())
+		self.isOnHover = true
+
 		
-#func _on_area_2d_mouse_exited() -> void:
-	#if isEnemy(self.game.PlayerTurn):
-		#signal.emi("reset_valid_moves")
+func _on_area_2d_mouse_exited() -> void:
+	if !isEnemy(self.game.PlayerTurn):
+		self.reset_valid_moves.emit()
+		self.isOnHover = false
 
 func updateSprite() -> void:
 	if self.team != Enums.TILETEAM.NULL:
@@ -77,3 +80,5 @@ func updateSprite() -> void:
 		image.load(self.spritePATH)
 		texture = ImageTexture.create_from_image(image)
 		%Sprite2D.texture = texture
+		print(%Sprite2D.position,%Sprite2D.global_position)
+		

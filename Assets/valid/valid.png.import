@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cky1sadtdhtwl"
-path="res://.godot/imported/whiterook.png-43841f5f94c4c70eda0554630dff9a30.ctex"
+uid="uid://lhn61um83q5m"
+path="res://.godot/imported/valid.png-fa991c4af791f0397e673c74ea55abe8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/whiterook.png"
-dest_files=["res://.godot/imported/whiterook.png-43841f5f94c4c70eda0554630dff9a30.ctex"]
+source_file="res://Assets/valid/valid.png"
+dest_files=["res://.godot/imported/valid.png-fa991c4af791f0397e673c74ea55abe8.ctex"]
 
 [params]
 

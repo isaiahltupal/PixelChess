@@ -15,6 +15,7 @@ static func createObject(piecegame:Game,pieceteam:Enums.TILETEAM,tilepiece:Enums
 	else:
 		newPiece.spritePATH = "res://Assets/whiterook.png"
 	newPiece.updateSprite()
+	print("why is sprite a null instance",newPiece.get_node("%Sprite2D"))
 	return newPiece
 
 #override
