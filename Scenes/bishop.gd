@@ -1,9 +1,5 @@
-extends Node
-class_name globalVariables
+extends Node2D
 
-static var LENGTH = 8
-
-static var canInitiateDragPiece = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

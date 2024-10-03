@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://cs3itbpvf88tw"]
+
+[ext_resource type="PackedScene" uid="uid://cxe2epeoaqfon" path="res://Scenes/piece.tscn" id="1_jkxc8"]
+[ext_resource type="Script" path="res://bishop.gd" id="2_v1kyy"]
+
+[node name="bishop" instance=ExtResource("1_jkxc8")]
+script = ExtResource("2_v1kyy")
