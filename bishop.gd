@@ -1,5 +1,5 @@
-class_name bishop
 extends piece
+class_name bishop
 
 
 #override this

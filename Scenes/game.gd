@@ -31,7 +31,8 @@ var board
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	initializeValidTiles()
-	test()
+	#test()
+	SetUpBoard()
 	PlayerTurn = Enums.TILETEAM.WHITE
 		
 func _process(delta: float) -> void:
@@ -46,6 +47,8 @@ func pieceMoved(PreviousMapPosition:Vector2i,NextMapPosition:Vector2i,PieceEvoke
 	#check if piece existed on the new position
 	if self.PIECES_ON_BOARD.has(NextMapPosition):
 		self.captureEvent(NextMapPosition)
+		
+	#check if piece was a pawn and it was an en passant capture		
 	
 	self.changePlayer()
 	self.PIECES_ON_BOARD[NextMapPosition] = self.PIECES_ON_BOARD[PreviousMapPosition]
@@ -62,7 +65,14 @@ func addPiece(team:Enums.TILETEAM,piecetype:Enums.TILEPIECE,MapPosition:Vector2i
 			newPiece = bishop.createObject(self,team,piecetype,MapPosition)
 			newPiece.MapPosition = MapPosition
 			newPiece.position = self.getPositionFromGridLocation(MapPosition)
-	
+		Enums.TILEPIECE.PAWN:
+			newPiece = pawn.createObject(self,team,piecetype,MapPosition)
+			newPiece.MapPosition = MapPosition
+			newPiece.position = self.getPositionFromGridLocation(MapPosition)
+		Enums.TILEPIECE.KNIGHT:
+			newPiece = knight.createObject(self,team,piecetype,MapPosition)
+			newPiece.MapPosition = MapPosition
+			newPiece.position = self.getPositionFromGridLocation(MapPosition)
 	newPiece.connect("display_valid_moves",_on_display_valid_moves)
 	newPiece.connect("reset_valid_moves",removeValidTilesFromView)
 	newPiece.connect("piece_moved",pieceMoved)
@@ -92,10 +102,31 @@ func removeValidTilesFromView()->void:
 		validTile.global_position = Vector2(-1000,4000)
 		
 func test():
-	addPiece(Enums.TILETEAM.WHITE,Enums.TILEPIECE.ROOK,Vector2i(3,3))
-	addPiece(Enums.TILETEAM.WHITE,Enums.TILEPIECE.BISHOP,Vector2i(2,3))
-	addPiece(Enums.TILETEAM.BLACK,Enums.TILEPIECE.BISHOP,Vector2i(0,1))
+	#addPiece(Enums.TILETEAM.WHITE,Enums.TILEPIECE.ROOK,Vector2i(3,3))
+	#addPiece(Enums.TILETEAM.WHITE,Enums.TILEPIECE.BISHOP,Vector2i(2,3))
+	#addPiece(Enums.TILETEAM.BLACK,Enums.TILEPIECE.BISHOP,Vector2i(0,1))
+	
+	for i in range(GlobalVariables.LENGTH):
+		addPiece(Enums.TILETEAM.WHITE,Enums.TILEPIECE.PAWN,Vector2i(i,6))
+		addPiece(Enums.TILETEAM.BLACK,Enums.TILEPIECE.PAWN,Vector2i(i,1))
+
+func SetUpBoard()->void:
+	for i in range(GlobalVariables.LENGTH):
+		addPiece(Enums.TILETEAM.WHITE,Enums.TILEPIECE.PAWN,Vector2i(i,6))
+		addPiece(Enums.TILETEAM.BLACK,Enums.TILEPIECE.PAWN,Vector2i(i,1))
+	
+	for i in [0,7]:
+		addPiece(Enums.TILETEAM.WHITE,Enums.TILEPIECE.ROOK,Vector2i(i,7))
+		addPiece(Enums.TILETEAM.BLACK,Enums.TILEPIECE.ROOK,Vector2i(i,0))
+	
+	for i in [1,6]:
+		addPiece(Enums.TILETEAM.WHITE,Enums.TILEPIECE.KNIGHT,Vector2i(i,7))
+		addPiece(Enums.TILETEAM.BLACK,Enums.TILEPIECE.KNIGHT,Vector2i(i,0))
 		
+	for i in [2,5]:
+		addPiece(Enums.TILETEAM.WHITE,Enums.TILEPIECE.BISHOP,Vector2i(i,7))
+		addPiece(Enums.TILETEAM.BLACK,Enums.TILEPIECE.BISHOP,Vector2i(i,0))
+	
 func _on_display_valid_moves(Valid_moves:Array)->void:
 	var idx = 0
 	for Valid_move in Valid_moves:
@@ -110,3 +141,4 @@ func changePlayer()->void:
 
 func captureEvent(NextMapPosition:Vector2i)->void:
 	self.PIECES_ON_BOARD[NextMapPosition].free()
+	

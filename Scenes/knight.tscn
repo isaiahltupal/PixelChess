@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://cjsf4cfcg5xq5"]
+
+[ext_resource type="PackedScene" uid="uid://cxe2epeoaqfon" path="res://Scenes/piece.tscn" id="1_k1lcv"]
+[ext_resource type="Script" path="res://knight.gd" id="2_yos8b"]
+
+[node name="piece" instance=ExtResource("1_k1lcv")]
+script = ExtResource("2_yos8b")

@@ -14,6 +14,10 @@ var ValidGridLoation = []
 var spritePATH = "res://Assets/whitepiece.png"
 var isOnHover:bool = false
 var beingDragged = false
+#var vulenerableFromEnPassant = false
+var hasMoved = false
+var firstMove = false
+#var doublePawnMove = false
 
 func _ready() -> void:
 	pass	
@@ -37,6 +41,11 @@ func _process(delta: float) -> void:
 				self.MapPosition = self.game.getGridLocationFromPosition(self.global_position)
 				self.global_position = self.game.getPositionFromGridLocation(self.MapPosition)
 				self.piece_moved.emit(previousMapPosition,self.MapPosition,self)
+				if self.hasMoved == false:
+					self.firstMove = true
+				else:
+					self.firstMove == false
+				self.hasMoved = true
 			else: 
 				self.global_position = self.game.getPositionFromGridLocation(self.MapPosition)
 				
@@ -81,6 +90,8 @@ func getRookiValidPosition()->void:
 		var NewPosition = Vector2i(self.MapPosition.x,y_new)
 		if self.isValidTile(NewPosition):
 			self.ValidGridLoation.append(NewPosition)
+			if self.game.PIECES_ON_BOARD.has(NewPosition):
+				break
 		else:
 			break
 			
@@ -89,6 +100,8 @@ func getRookiValidPosition()->void:
 		var NewPosition = Vector2i(self.MapPosition.x,self.MapPosition.y-y_new)
 		if self.isValidTile(NewPosition):
 			self.ValidGridLoation.append(NewPosition)
+			if self.game.PIECES_ON_BOARD.has(NewPosition):
+				break
 		else:
 			break
 
@@ -97,6 +110,8 @@ func getRookiValidPosition()->void:
 		var NewPosition = Vector2i(x_new,self.MapPosition.y)
 		if self.isValidTile(NewPosition):
 			self.ValidGridLoation.append(NewPosition)
+			if self.game.PIECES_ON_BOARD.has(NewPosition):
+				break
 		else:
 			break
 	
@@ -105,6 +120,8 @@ func getRookiValidPosition()->void:
 		var NewPosition = Vector2i(self.MapPosition.x - x_new,self.MapPosition.y)
 		if self.isValidTile(NewPosition):
 			self.ValidGridLoation.append(NewPosition)
+			if self.game.PIECES_ON_BOARD.has(NewPosition):
+				break
 		else:
 			break
 
@@ -114,6 +131,8 @@ func getBishopValidPosition()->void:
 		var NewPosition = Vector2i(self.MapPosition.x+delta,self.MapPosition.y+delta)
 		if self.isValidTile(NewPosition):
 			self.ValidGridLoation.append(NewPosition)
+			if self.game.PIECES_ON_BOARD.has(NewPosition):
+				break
 		else:
 			break
 	
@@ -122,6 +141,8 @@ func getBishopValidPosition()->void:
 		var NewPosition = Vector2i(self.MapPosition.x-delta,self.MapPosition.y+delta)
 		if self.isValidTile(NewPosition):
 			self.ValidGridLoation.append(NewPosition)
+			if self.game.PIECES_ON_BOARD.has(NewPosition):
+				break
 		else:
 			break
 	
@@ -130,6 +151,8 @@ func getBishopValidPosition()->void:
 		var NewPosition = Vector2i(self.MapPosition.x-delta,self.MapPosition.y-delta)
 		if self.isValidTile(NewPosition):
 			self.ValidGridLoation.append(NewPosition)
+			if self.game.PIECES_ON_BOARD.has(NewPosition):
+				break
 		else:
 			break
 			
@@ -138,8 +161,50 @@ func getBishopValidPosition()->void:
 		var NewPosition = Vector2i(self.MapPosition.x+delta,self.MapPosition.y-delta)
 		if self.isValidTile(NewPosition):
 			self.ValidGridLoation.append(NewPosition)
+			if self.game.PIECES_ON_BOARD.has(NewPosition):
+				break
 		else:
 			break
+
+func getKnightValidPosition()->void:
+	#just list all 8 of them
+
+	var lu = Vector2i(self.MapPosition.x-2,self.MapPosition.y-1)
+	var ul = Vector2i(self.MapPosition.x-1,self.MapPosition.y-2)
+	var ru = Vector2i(self.MapPosition.x+2,self.MapPosition.y-1)
+	var ur = Vector2i(self.MapPosition.x+1,self.MapPosition.y-2)
+	var ld = Vector2i(self.MapPosition.x-2,self.MapPosition.y+1)
+	var dl = Vector2i(self.MapPosition.x-1,self.MapPosition.y+2)
+	var rd = Vector2i(self.MapPosition.x+2,self.MapPosition.y+2)
+	var dr = Vector2i(self.MapPosition.x+1,self.MapPosition.y+1)
+	
+	var listKnight = [lu,ul,ru,ur,ld,dl,rd,dr]
+	for pos in listKnight:
+		if self.isValidTile(pos):
+			self.ValidGridLoation.append(pos)
+
+func getPawnValidPosition()->void:
+	var y_delta = 1
+	if self.team == Enums.TILETEAM.WHITE:
+		y_delta = -1
+	
+	var forwardPosition = Vector2i(self.MapPosition.x,self.MapPosition.y + y_delta)
+	if self.isValidTile(forwardPosition) and !self.game.PIECES_ON_BOARD.has(forwardPosition):
+		self.ValidGridLoation.append(forwardPosition)
+	
+	var forwardPosition2 = Vector2i(self.MapPosition.x,self.MapPosition.y + 2*y_delta)
+	if !self.hasMoved :
+		if !self.game.PIECES_ON_BOARD.has(forwardPosition2) and !self.game.PIECES_ON_BOARD.has(forwardPosition):
+			self.ValidGridLoation.append(forwardPosition2)
+	#sideways
+	var sidePosition:Vector2i = Vector2i(self.MapPosition.x-1,self.MapPosition.y+y_delta)
+	if self.game.PIECES_ON_BOARD.has(sidePosition) and self.isValidTile(sidePosition):
+		self.ValidGridLoation.append(sidePosition)
+		
+	sidePosition = Vector2i(self.MapPosition.x+1,self.MapPosition.y+y_delta)
+	if self.game.PIECES_ON_BOARD.has(sidePosition) and self.isValidTile(sidePosition):
+		self.ValidGridLoation.append(sidePosition)
+
 func isValidTile(selectedPosition:Vector2i)->bool:
 	if !self.game.PIECES_ON_BOARD.has(selectedPosition) and self.tileIsInBoard(selectedPosition):
 		return true
@@ -148,12 +213,10 @@ func isValidTile(selectedPosition:Vector2i)->bool:
 			return true
 	return false
 
-
 func tileIsInBoard(SelectedPosition:Vector2i)->bool:
 	if SelectedPosition.x < globalVariables.LENGTH and SelectedPosition.y < globalVariables.LENGTH and SelectedPosition.x >= 0 and SelectedPosition.y >= 0 :
 		return true
 	return false
-		
 
 func updateSprite() -> void:
 	if self.team != Enums.TILETEAM.NULL:
