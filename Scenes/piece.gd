@@ -205,6 +205,24 @@ func getPawnValidPosition()->void:
 	if self.game.PIECES_ON_BOARD.has(sidePosition) and self.isValidTile(sidePosition):
 		self.ValidGridLoation.append(sidePosition)
 
+func getKingValidPosition()->void:
+	var kingvalidtiles = [
+		#perpendicular
+		Vector2i(self.MapPosition.x+1,self.MapPosition.y),
+		Vector2i(self.MapPosition.x-1,self.MapPosition.y),
+		Vector2i(self.MapPosition.x,self.MapPosition.y+1),
+		Vector2i(self.MapPosition.x,self.MapPosition.y-1),
+		#diagonal
+		Vector2i(self.MapPosition.x-1,self.MapPosition.y-1),
+		Vector2i(self.MapPosition.x+1,self.MapPosition.y+1),
+		Vector2i(self.MapPosition.x-1,self.MapPosition.y+1),
+		Vector2i(self.MapPosition.x+1,self.MapPosition.y-1),
+	]
+	
+	for possibleValid in kingvalidtiles:
+		if self.isValidTile(possibleValid):
+			self.ValidGridLoation.append(possibleValid)
+
 func isValidTile(selectedPosition:Vector2i)->bool:
 	if !self.game.PIECES_ON_BOARD.has(selectedPosition) and self.tileIsInBoard(selectedPosition):
 		return true

@@ -1,0 +1,7 @@
+[gd_scene load_steps=3 format=3 uid="uid://dkvid3ay66ygm"]
+
+[ext_resource type="PackedScene" uid="uid://cxe2epeoaqfon" path="res://Scenes/piece.tscn" id="1_m7ken"]
+[ext_resource type="Script" path="res://queen.gd" id="2_m2upu"]
+
+[node name="piece" instance=ExtResource("1_m7ken")]
+script = ExtResource("2_m2upu")
