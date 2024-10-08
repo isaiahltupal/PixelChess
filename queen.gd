@@ -18,7 +18,8 @@ static func createObject(piecegame:Game,pieceteam:Enums.TILETEAM,tilepiece:Enums
 
 #override
 func getValidPosiiton()->Array:
-	self.ValidGridLoation = [] #set to empty
+	self.ValidGridLocation = [] #set to empty
 	self.getBishopValidPosition()
 	self.getRookiValidPosition()
-	return self.ValidGridLoation
+
+	return self.ValidGridLocation

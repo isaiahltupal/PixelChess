@@ -8,6 +8,8 @@ static func createObject(piecegame:Game,pieceteam:Enums.TILETEAM,tilepiece:Enums
 	newPiece.game = piecegame
 	newPiece.team = pieceteam
 	newPiece.piecetype = tilepiece
+	print(newPiece.piecetype,"this should be 6")
+	assert(newPiece.piecetype==6)
 	newPiece.MapPosition = MapPostion
 	if pieceteam == Enums.TILETEAM.BLACK:
 		newPiece.spritePATH = "res://Assets/blackking.png"
@@ -18,6 +20,7 @@ static func createObject(piecegame:Game,pieceteam:Enums.TILETEAM,tilepiece:Enums
 
 #override
 func getValidPosiiton()->Array:
-	self.ValidGridLoation = [] #set to empty
+	self.ValidGridLocation = [] #set to empty
 	self.getKingValidPosition()
-	return self.ValidGridLoation
+
+	return self.ValidGridLocation

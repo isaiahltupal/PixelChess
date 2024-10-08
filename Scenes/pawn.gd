@@ -22,10 +22,11 @@ static func createObject(piecegame:Game,pieceteam:Enums.TILETEAM,tilepiece:Enums
 
 #override
 func getValidPosiiton()->Array:
-	self.ValidGridLoation = [] #set to empty
+	self.ValidGridLocation = [] #set to empty
 	self.getPawnValidPosition()
 	#self.getValidEnPassant()
-	return self.ValidGridLoation
+
+	return self.ValidGridLocation
 	
 func getValidEnPassant()->void:
 	#FIX THIS LATER NALANG
@@ -51,5 +52,7 @@ func getValidEnPassant()->void:
 			var chosen_pawn:pawn = chosen_piece
 			if chosen_pawn.vulenerableFromEnPassant and self.isValidTile(left_move):
 				self.ValidGridLocation.appen(left_move)
+	
+
 				
 			

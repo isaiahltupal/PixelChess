@@ -33,6 +33,7 @@ var board
 func _ready() -> void:
 	initializeValidTiles()
 	SetUpBoard()
+	#test()
 	PlayerTurn = Enums.TILETEAM.WHITE
 		
 func _process(delta: float) -> void:
@@ -58,10 +59,11 @@ func pieceMoved(PreviousMapPosition:Vector2i,NextMapPosition:Vector2i,PieceEvoke
 	self.changePlayer()
 	self.PIECES_ON_BOARD[NextMapPosition] = self.PIECES_ON_BOARD[PreviousMapPosition]
 	self.PIECES_ON_BOARD.erase(PreviousMapPosition)
-	
 		#check if there is a check
 	if ChessUtils.isTeamChecked(self,self.PlayerTurn):
 		print("shit is checked!")
+		if ChessUtils.isTeamCheckMate(self,self.PlayerTurn):
+			print("checkmate")
 
 func addPiece(team:Enums.TILETEAM,piecetype:Enums.TILEPIECE,MapPosition:Vector2i)->void:
 	var newPiece:piece
@@ -119,10 +121,15 @@ func removeValidTilesFromView()->void:
 		validTile.global_position = Vector2(-1000,4000)
 		
 func test():
-	var virtualGame = ChessUtils.createVirtualGame()
-	var unkownPiece = ChessUtils.getVirtualPieceFromPiece(self.PIECES_ON_BOARD[Vector2i(0,0)],virtualGame)
-
-
+	
+	addPiece(Enums.TILETEAM.WHITE,Enums.TILEPIECE.ROOK,Vector2i(4,6))
+	addPiece(Enums.TILETEAM.BLACK,Enums.TILEPIECE.QUEEN,Vector2i(4,1))
+	addPiece(Enums.TILETEAM.WHITE,Enums.TILEPIECE.QUEEN,Vector2i(4,3))
+	
+	#king 
+	addPiece(Enums.TILETEAM.WHITE,Enums.TILEPIECE.KING,Vector2i(4,7))
+	addPiece(Enums.TILETEAM.BLACK,Enums.TILEPIECE.KING,Vector2i(4,0))
+	
 #virtual pieces to check other game states when determining if the check is a checkmate
 
 func SetUpBoard()->void:
