@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3 uid="uid://dys15tnkq8gnu"]
+
+[ext_resource type="Script" path="res://Scenes/background.gd" id="1_5y32l"]
+[ext_resource type="Texture2D" uid="uid://cj17opkk11mtv" path="res://Assets/Logos/background.png" id="1_wpe3k"]
+
+[node name="Background" type="CanvasLayer"]
+layer = -100
+script = ExtResource("1_5y32l")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+show_behind_parent = true
+texture = ExtResource("1_wpe3k")

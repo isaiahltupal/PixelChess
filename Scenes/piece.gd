@@ -176,8 +176,8 @@ func getKnightValidPosition()->void:
 	var ur = Vector2i(self.MapPosition.x+1,self.MapPosition.y-2)
 	var ld = Vector2i(self.MapPosition.x-2,self.MapPosition.y+1)
 	var dl = Vector2i(self.MapPosition.x-1,self.MapPosition.y+2)
-	var rd = Vector2i(self.MapPosition.x+2,self.MapPosition.y+2)
-	var dr = Vector2i(self.MapPosition.x+1,self.MapPosition.y+1)
+	var rd = Vector2i(self.MapPosition.x+2,self.MapPosition.y+1)
+	var dr = Vector2i(self.MapPosition.x+1,self.MapPosition.y+2)
 	
 	var listKnight = [lu,ul,ru,ur,ld,dl,rd,dr]
 	for pos in listKnight:
