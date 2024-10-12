@@ -21,5 +21,4 @@ static func createObject(piecegame:Game,pieceteam:Enums.TILETEAM,tilepiece:Enums
 func getValidPosiiton()->Array:
 	self.ValidGridLocation = [] #set to empty
 	self.getKnightValidPosition()
-
 	return self.ValidGridLocation

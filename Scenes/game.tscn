@@ -9,6 +9,7 @@
 script = ExtResource("1_aw7ge")
 
 [node name="Background" parent="." instance=ExtResource("4_k2d1f")]
+unique_name_in_owner = true
 
 [node name="board" parent="." instance=ExtResource("1_j17sq")]
 unique_name_in_owner = true

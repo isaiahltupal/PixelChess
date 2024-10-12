@@ -20,11 +20,10 @@ class_name Game
 	#NULL
 #} 
 
-@export var GridLength = 8
-#@export var GAMETEAMS = {} #dicstionary of location team (key is vector2i)
-#@export var GAMEPIECES = {} #dictionary of location of piecetype (key is vector2i)
-@export var PIECES_ON_BOARD = {}
-@export var PlayerTurn:Enums.TILETEAM 
+var GridLength = 8
+var PIECES_ON_BOARD = {}
+var PlayerTurn:Enums.TILETEAM 
+signal player_has_changed(team:Enums.TILETEAM)
 
 var ValidScenes = []
 
@@ -169,11 +168,12 @@ func changePlayer()->void:
 		self.PlayerTurn = Enums.TILETEAM.BLACK
 	else:
 		self.PlayerTurn = Enums.TILETEAM.WHITE
+	
+	%Background.changeBackground(self.PlayerTurn)
 
 func captureEvent(NextMapPosition:Vector2i)->void:
 	self.PIECES_ON_BOARD[NextMapPosition].free()
-
-
+	
 
 #list of all valid moves of a team
 	

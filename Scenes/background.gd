@@ -27,3 +27,16 @@ func resize() -> void:
 	self.scale = Vector2(scaleval,scaleval)
 	self.offset = Vector2i(int(.9*x/2),int(.9*y/2))
 	
+func changeBackground(team:Enums.TILETEAM)->void:
+	var spritePATH:String
+	var image = Image.new()
+	var texture =ImageTexture.new()
+	
+	if team == Enums.TILETEAM.BLACK:
+		spritePATH = "res://Assets/background/backgroundblack.png"
+	else:
+		spritePATH = "res://Assets/background/backgroundwhite.png"
+	image.load(spritePATH)
+	texture = ImageTexture.create_from_image(image)
+	%Sprite2D.texture = texture
+	self.resize()

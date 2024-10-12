@@ -17,12 +17,16 @@ enum TILETEAM {
 	NULL
 } 
 
-enum specialMove{
+enum SPECIAL_MOVE{
 	NULL,
 	ENPASSANT,
 	CASTLING
 }
 
+enum END_REASON{
+	CHECKMATE,
+	DRAW
+}
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
