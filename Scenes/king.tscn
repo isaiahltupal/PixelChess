@@ -1,7 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://dveq6a6jpfwck"]
+[gd_scene load_steps=4 format=3 uid="uid://dveq6a6jpfwck"]
 
 [ext_resource type="PackedScene" uid="uid://cxe2epeoaqfon" path="res://Scenes/piece.tscn" id="1_npuj0"]
 [ext_resource type="Script" path="res://Scenes/king.gd" id="2_12xfv"]
+[ext_resource type="Texture2D" uid="uid://btc0invffu84r" path="res://Assets/check.png" id="3_ihslh"]
 
 [node name="piece" instance=ExtResource("1_npuj0")]
 script = ExtResource("2_12xfv")
+
+[node name="check" type="Sprite2D" parent="." index="1"]
+unique_name_in_owner = true
+visible = false
+texture = ExtResource("3_ihslh")

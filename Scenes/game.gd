@@ -20,10 +20,15 @@ class_name Game
 	#NULL
 #} 
 
+
+
 var GridLength = 8
 var PIECES_ON_BOARD = {}
 var PlayerTurn:Enums.TILETEAM 
 signal player_has_changed(team:Enums.TILETEAM)
+signal king_is_Checked(team:Enums.TILETEAM)
+signal king_is_notChecked(team:Enums.TILETEAM)
+signal game_has_ended(team:Enums.TILETEAM,reason:Enums.END_REASON)
 
 var ValidScenes = []
 
@@ -61,8 +66,12 @@ func pieceMoved(PreviousMapPosition:Vector2i,NextMapPosition:Vector2i,PieceEvoke
 		#check if there is a check
 	if ChessUtils.isTeamChecked(self,self.PlayerTurn):
 		print("shit is checked!")
+		king_is_Checked.emit(self.PlayerTurn)
 		if ChessUtils.isTeamCheckMate(self,self.PlayerTurn):
-			print("checkmate")
+			checkMateEvent()
+			
+	else:
+		king_is_notChecked.emit(self.PlayerTurn)
 
 func addPiece(team:Enums.TILETEAM,piecetype:Enums.TILEPIECE,MapPosition:Vector2i)->void:
 	var newPiece:piece
@@ -91,6 +100,7 @@ func addPiece(team:Enums.TILETEAM,piecetype:Enums.TILEPIECE,MapPosition:Vector2i
 			newPiece = king.createObject(self,team,piecetype,MapPosition)
 			newPiece.MapPosition = MapPosition
 			newPiece.position = self.getPositionFromGridLocation(MapPosition)
+			
 	newPiece.connect("display_valid_moves",_on_display_valid_moves)
 	newPiece.connect("reset_valid_moves",removeValidTilesFromView)
 	newPiece.connect("piece_moved",pieceMoved)
@@ -174,6 +184,10 @@ func changePlayer()->void:
 func captureEvent(NextMapPosition:Vector2i)->void:
 	self.PIECES_ON_BOARD[NextMapPosition].free()
 	
-
+func checkMateEvent()->void:
+	game_has_ended.emit(self.PlayerTurn,Enums.END_REASON.CHECKMATE)
+	get_tree().paused = true
+	print("checkmate")
 #list of all valid moves of a team
+	pass
 	
