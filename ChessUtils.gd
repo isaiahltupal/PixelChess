@@ -143,7 +143,7 @@ static func getKing(chosengame:Game,chosenteam:Enums.TILETEAM)->piece:
 	assert(false)
 	return null
 
-static func isPawnPromotion(evokedPawn:pawn,game:Game)->bool:
+static func isPawnPromotion(evokedPawn:pawn)->bool:
 	if evokedPawn.team == Enums.TILETEAM.BLACK and evokedPawn.MapPosition.y == 7:
 		return true
 	elif evokedPawn.team == Enums.TILETEAM.WHITE and evokedPawn.MapPosition.y == 0:

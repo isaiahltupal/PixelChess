@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://kvshxnuvof1o"]
 
 [ext_resource type="Script" path="res://Scenes/end_screen.gd" id="1_d5qre"]
-[ext_resource type="Texture2D" uid="uid://dox2fl460gv13" path="res://atlas/ui elements.png" id="1_nnoyr"]
+[ext_resource type="Texture2D" uid="uid://dox2fl460gv13" path="res://ui elements.png" id="1_nnoyr"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4kaem"]
 texture = ExtResource("1_nnoyr")
@@ -48,3 +48,6 @@ layout_mode = 2
 text = "Won "
 horizontal_alignment = 1
 metadata/_edit_use_anchors_ = true
+
+[node name="Button" type="Button" parent="HBoxContainer"]
+layout_mode = 2

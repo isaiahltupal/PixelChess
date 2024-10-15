@@ -1,0 +1,75 @@
+[gd_scene load_steps=5 format=3 uid="uid://b8f8rbyxbbtx4"]
+
+[ext_resource type="Texture2D" uid="uid://dox2fl460gv13" path="res://ui elements.png" id="1_5q0n7"]
+[ext_resource type="Script" path="res://Scenes/pawn_promotion.gd" id="1_wsdgk"]
+[ext_resource type="Theme" uid="uid://c0q0w54400a2w" path="res://resources/theme.tres" id="4_glugg"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_fhlsd"]
+texture = ExtResource("1_5q0n7")
+texture_margin_left = 4.0
+texture_margin_top = 4.0
+texture_margin_right = 4.0
+texture_margin_bottom = 4.0
+region_rect = Rect2(6, 80, 104, 72)
+
+[node name="pawnPromotion" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+size_flags_horizontal = 0
+size_flags_vertical = 0
+script = ExtResource("1_wsdgk")
+metadata/_edit_use_anchors_ = true
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+offset_right = 128.0
+offset_bottom = 144.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_fhlsd")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -45.0
+offset_top = -56.5
+offset_right = 45.0
+offset_bottom = 56.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("4_glugg")
+text = "Pawn Promotion"
+
+[node name="rook" type="Button" parent="Panel/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_glugg")
+text = "rook"
+
+[node name="knight" type="Button" parent="Panel/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_glugg")
+text = "knight"
+
+[node name="bishop" type="Button" parent="Panel/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_glugg")
+text = "bishop"
+
+[node name="queen" type="Button" parent="Panel/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_glugg")
+text = "queen"
+
+[connection signal="pressed" from="Panel/VBoxContainer/rook" to="." method="_on_rook_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/knight" to="." method="_on_knight_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/bishop" to="." method="_on_bishop_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/queen" to="." method="_on_queen_pressed"]

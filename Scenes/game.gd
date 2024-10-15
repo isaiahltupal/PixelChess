@@ -31,13 +31,13 @@ signal king_is_notChecked(team:Enums.TILETEAM)
 signal game_has_ended(team:Enums.TILETEAM,reason:Enums.END_REASON)
 
 var ValidScenes = []
-
+var pawnPromotionScene:Control
 var board
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	initializeValidTiles()
-	SetUpBoard()
-	#test()
+	#SetUpBoard()
+	test()
 	PlayerTurn = Enums.TILETEAM.WHITE
 		
 func _process(delta: float) -> void:
@@ -60,8 +60,13 @@ func pieceMoved(PreviousMapPosition:Vector2i,NextMapPosition:Vector2i,PieceEvoke
 	
 	#check if pawn promotion
 	if PieceEvoked.piecetype == Enums.TILEPIECE.PAWN:
-		if ChessUtils.isPawnPromotion(PieceEvoked,self):
-			pass
+		var tite = ChessUtils.isPawnPromotion(PieceEvoked)
+		if ChessUtils.isPawnPromotion(PieceEvoked):
+			self.pawnPromotionScene = pawnPromotion.instantiatePawn(PieceEvoked)
+			add_child(self.pawnPromotionScene)
+			self.pawnPromotionScene.connect("chosen_promotion",promotePawn)
+			return
+			#function ends here and gets re-evoked once a pawn is promoted
 	
 	#check if piece was a pawn and it was an en passant capture		
 	self.changePlayer()
@@ -69,11 +74,9 @@ func pieceMoved(PreviousMapPosition:Vector2i,NextMapPosition:Vector2i,PieceEvoke
 	self.PIECES_ON_BOARD.erase(PreviousMapPosition)
 		#check if there is a check
 	if ChessUtils.isTeamChecked(self,self.PlayerTurn):
-		print("shit is checked!")
 		king_is_Checked.emit(self.PlayerTurn)
 		if ChessUtils.isTeamCheckMate(self,self.PlayerTurn):
 			checkMateEvent()
-			
 	else:
 		king_is_notChecked.emit(self.PlayerTurn)
 
@@ -142,7 +145,7 @@ func test():
 	#king 
 	addPiece(Enums.TILETEAM.WHITE,Enums.TILEPIECE.KING,Vector2i(4,7))
 	addPiece(Enums.TILETEAM.BLACK,Enums.TILEPIECE.KING,Vector2i(4,0))
-	
+	addPiece(Enums.TILETEAM.BLACK,Enums.TILEPIECE.PAWN,Vector2i(6,6))
 #virtual pieces to check other game states when determining if the check is a checkmate
 
 func SetUpBoard()->void:
@@ -200,4 +203,18 @@ func checkMateEvent()->void:
 #list of all valid moves of a team
 	pass
 
+func promotePawn(tilepiece:Enums.TILEPIECE,evokedPawn:pawn)->void:
+	var mapPosition = evokedPawn.MapPosition
+	self.PIECES_ON_BOARD.erase(mapPosition)
+	addPiece(self.PlayerTurn,tilepiece,mapPosition)
+	if ChessUtils.isTeamChecked(self,self.PlayerTurn):
+		king_is_Checked.emit(self.PlayerTurn)
+		if ChessUtils.isTeamCheckMate(self,self.PlayerTurn):
+			checkMateEvent()
+	else:
+		king_is_notChecked.emit(self.PlayerTurn)
+		self.pawnPromotionScene.queue_free()
+	
+	
+	
 	
