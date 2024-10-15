@@ -1,0 +1,50 @@
+[gd_scene load_steps=4 format=3 uid="uid://kvshxnuvof1o"]
+
+[ext_resource type="Script" path="res://Scenes/end_screen.gd" id="1_d5qre"]
+[ext_resource type="Texture2D" uid="uid://dox2fl460gv13" path="res://atlas/ui elements.png" id="1_nnoyr"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4kaem"]
+texture = ExtResource("1_nnoyr")
+texture_margin_left = 4.0
+texture_margin_top = 4.0
+texture_margin_right = 4.0
+texture_margin_bottom = 4.0
+region_rect = Rect2(6, 80, 104, 72)
+
+[node name="EndScreen" type="CanvasLayer"]
+script = ExtResource("1_d5qre")
+
+[node name="Panel" type="Panel" parent="."]
+offset_left = 328.0
+offset_top = 248.0
+offset_right = 467.0
+offset_bottom = 360.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_styles/panel = SubResource("StyleBoxTexture_4kaem")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -43.5
+offset_top = -20.0
+offset_right = 43.5
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Team" type="Label" parent="HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Team"
+horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="HBoxContainer"]
+layout_mode = 2
+text = "Won "
+horizontal_alignment = 1
+metadata/_edit_use_anchors_ = true

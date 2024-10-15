@@ -57,9 +57,13 @@ func pieceMoved(PreviousMapPosition:Vector2i,NextMapPosition:Vector2i,PieceEvoke
 	#check if piece existed on the new position
 	if self.PIECES_ON_BOARD.has(NextMapPosition):
 		self.captureEvent(NextMapPosition)
-		
-	#check if piece was a pawn and it was an en passant capture		
 	
+	#check if pawn promotion
+	if PieceEvoked.piecetype == Enums.TILEPIECE.PAWN:
+		if ChessUtils.isPawnPromotion(PieceEvoked,self):
+			pass
+	
+	#check if piece was a pawn and it was an en passant capture		
 	self.changePlayer()
 	self.PIECES_ON_BOARD[NextMapPosition] = self.PIECES_ON_BOARD[PreviousMapPosition]
 	self.PIECES_ON_BOARD.erase(PreviousMapPosition)
@@ -185,9 +189,15 @@ func captureEvent(NextMapPosition:Vector2i)->void:
 	self.PIECES_ON_BOARD[NextMapPosition].free()
 	
 func checkMateEvent()->void:
+	changePlayer()
 	game_has_ended.emit(self.PlayerTurn,Enums.END_REASON.CHECKMATE)
-	get_tree().paused = true
+	#get_tree().paused = true
+	var endscreen = preload("res://Scenes/end_screen.tscn").instantiate()
+	endscreen.display(self.PlayerTurn,Enums.END_REASON.CHECKMATE)
+	add_child(endscreen)
 	print("checkmate")
+	
 #list of all valid moves of a team
 	pass
+
 	
