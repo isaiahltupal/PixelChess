@@ -33,11 +33,14 @@ signal game_has_ended(team:Enums.TILETEAM,reason:Enums.END_REASON)
 var ValidScenes = []
 var pawnPromotionScene:Control
 var board
+@export var debugMode:bool
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	initializeValidTiles()
-	#SetUpBoard()
-	test()
+	if !debugMode:
+		SetUpBoard()
+	else:
+		test()
 	PlayerTurn = Enums.TILETEAM.WHITE
 		
 func _process(delta: float) -> void:
@@ -51,9 +54,13 @@ func _process(delta: float) -> void:
 #PIECE WAS MOVED , UPDATE GAME
 func pieceMoved(PreviousMapPosition:Vector2i,NextMapPosition:Vector2i,PieceEvoked:piece)->void:
 	var MoveNotation:String = ""
+	king_is_notChecked.emit(self.PlayerTurn)
 	#TODO HERE
 	#check update, check if a piece was eaten, change player turn
-	
+	if PieceEvoked.piecetype == Enums.TILEPIECE.PAWN:
+		var lateralMovement = abs(PreviousMapPosition.x-NextMapPosition.x)
+		if lateralMovement==1 and !self.PIECES_ON_BOARD.has(NextMapPosition):
+			self.performEnPassant(PreviousMapPosition,NextMapPosition)
 	#check if piece existed on the new position
 	if self.PIECES_ON_BOARD.has(NextMapPosition):
 		self.captureEvent(NextMapPosition)
@@ -63,12 +70,18 @@ func pieceMoved(PreviousMapPosition:Vector2i,NextMapPosition:Vector2i,PieceEvoke
 	
 	#check if pawn promotion
 	if PieceEvoked.piecetype == Enums.TILEPIECE.PAWN:
-		var tite = ChessUtils.isPawnPromotion(PieceEvoked)
 		if ChessUtils.isPawnPromotion(PieceEvoked):
 			self.pawnPromotionScene = pawnPromotion.instantiatePawn(PieceEvoked)
 			add_child(self.pawnPromotionScene)
 			self.pawnPromotionScene.connect("chosen_promotion",promotePawn)
 			return
+
+	
+	#check if castle
+	if PieceEvoked.piecetype == Enums.TILEPIECE.KING:
+		var move_diff = abs(PreviousMapPosition.x - NextMapPosition.x)
+		if move_diff==2:
+			performCastling(PreviousMapPosition,NextMapPosition) 
 	
 	self.changePlayer()
 	
@@ -137,13 +150,17 @@ func removeValidTilesFromView()->void:
 		validTile.global_position = Vector2(-1000,4000)
 		
 func test():
+
+	
+	for i in [0,7]:
+		addPiece(Enums.TILETEAM.WHITE,Enums.TILEPIECE.ROOK,Vector2i(i,7))
+		addPiece(Enums.TILETEAM.BLACK,Enums.TILEPIECE.ROOK,Vector2i(i,0))
 	
 	#king 
+		#queen
 	addPiece(Enums.TILETEAM.WHITE,Enums.TILEPIECE.KING,Vector2i(4,7))
 	addPiece(Enums.TILETEAM.BLACK,Enums.TILEPIECE.KING,Vector2i(4,0))
-	addPiece(Enums.TILETEAM.BLACK,Enums.TILEPIECE.ROOK,Vector2i(0,6))
-	addPiece(Enums.TILETEAM.BLACK,Enums.TILEPIECE.PAWN,Vector2i(6,6))
-#virtual pieces to check other game states when determining if the check is a checkmate
+
 
 func SetUpBoard()->void:
 	for i in range(GlobalVariables.LENGTH):
@@ -184,6 +201,7 @@ func changePlayer()->void:
 		self.PlayerTurn = Enums.TILETEAM.WHITE
 	
 	%Background.changeBackground(self.PlayerTurn)
+	player_has_changed.emit(self.PlayerTurn)
 
 func captureEvent(NextMapPosition:Vector2i)->void:
 	self.PIECES_ON_BOARD[NextMapPosition].free()
@@ -218,6 +236,24 @@ func promotePawn(tilepiece:Enums.TILEPIECE,evokedPawn:pawn)->void:
 	else:
 		king_is_notChecked.emit(self.PlayerTurn)
 	
+
+func performCastling(PreviousMapPosition:Vector2i,NextMapPosition:Vector2i)->void:
+	if PreviousMapPosition.x > NextMapPosition.x: #did it move left
+		var rookPosition:Vector2i = Vector2i(0,NextMapPosition.y)
+		var rookNewPosition:Vector2i = Vector2i(NextMapPosition.x+1,NextMapPosition.y)
+		self.PIECES_ON_BOARD[rookNewPosition] = self.PIECES_ON_BOARD[rookPosition]
+		self.PIECES_ON_BOARD.erase(rookPosition)
+		self.PIECES_ON_BOARD[rookNewPosition].position = getPositionFromGridLocation(rookNewPosition) 
+		self.PIECES_ON_BOARD[rookNewPosition].MapPosition = rookNewPosition
+	else: #did it move right
+		var rookPosition:Vector2i = Vector2i(7,NextMapPosition.y)
+		var rookNewPosition:Vector2i = Vector2i(NextMapPosition.x-1,NextMapPosition.y)
+		self.PIECES_ON_BOARD[rookNewPosition] = self.PIECES_ON_BOARD[rookPosition]
+		self.PIECES_ON_BOARD.erase(rookPosition)
+		self.PIECES_ON_BOARD[rookNewPosition].position = getPositionFromGridLocation(rookNewPosition) 
+		self.PIECES_ON_BOARD[rookNewPosition].MapPosition = rookNewPosition
 	
-	
-	
+func performEnPassant(PreviousMapPosition:Vector2i,NextMapPosition:Vector2i)->void:
+	var mapPosition:Vector2i = Vector2i(NextMapPosition.x,PreviousMapPosition.y)
+	self.PIECES_ON_BOARD[mapPosition].free()
+	self.PIECES_ON_BOARD.erase(mapPosition)

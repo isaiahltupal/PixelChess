@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://kvshxnuvof1o"]
+[gd_scene load_steps=5 format=3 uid="uid://kvshxnuvof1o"]
 
 [ext_resource type="Script" path="res://Scenes/end_screen.gd" id="1_d5qre"]
 [ext_resource type="Texture2D" uid="uid://dox2fl460gv13" path="res://ui elements.png" id="1_nnoyr"]
+[ext_resource type="Theme" uid="uid://c0q0w54400a2w" path="res://resources/theme.tres" id="3_opb58"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_4kaem"]
 texture = ExtResource("1_nnoyr")
@@ -11,43 +12,68 @@ texture_margin_right = 4.0
 texture_margin_bottom = 4.0
 region_rect = Rect2(6, 80, 104, 72)
 
-[node name="EndScreen" type="CanvasLayer"]
+[node name="EndScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 0
 script = ExtResource("1_d5qre")
 
 [node name="Panel" type="Panel" parent="."]
-offset_left = 328.0
-offset_top = 248.0
-offset_right = 467.0
-offset_bottom = 360.0
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -56.0
+offset_right = 139.0
+offset_bottom = 56.0
+grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_styles/panel = SubResource("StyleBoxTexture_4kaem")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -43.5
+offset_left = -49.5
 offset_top = -20.0
-offset_right = 43.5
+offset_right = 49.5
 offset_bottom = 20.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
 alignment = 1
 
-[node name="Team" type="Label" parent="HBoxContainer"]
+[node name="Team" type="Label" parent="Panel/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+theme = ExtResource("3_opb58")
 text = "Team"
 horizontal_alignment = 1
 
-[node name="Label" type="Label" parent="HBoxContainer"]
+[node name="Label" type="Label" parent="Panel/VBoxContainer/HBoxContainer"]
 layout_mode = 2
+theme = ExtResource("3_opb58")
 text = "Won "
 horizontal_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="Button" type="Button" parent="HBoxContainer"]
+[node name="playAgainButton" type="Button" parent="Panel/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
+theme = ExtResource("3_opb58")
+text = "Play Again"
+
+[node name="quitButton" type="Button" parent="Panel/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("3_opb58")
+text = "Quit"
+
+[connection signal="pressed" from="Panel/VBoxContainer/playAgainButton" to="." method="_on_play_again_button_pressed"]
+[connection signal="pressed" from="Panel/VBoxContainer/quitButton" to="." method="_on_quit_button_pressed"]

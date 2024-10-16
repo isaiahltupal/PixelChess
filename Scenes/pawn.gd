@@ -4,7 +4,6 @@ class_name pawn
 var vulenerableFromEnPassant:bool = false
 #var doublePawnMove:bool = false
 	
-	
 #override this
 static func createObject(piecegame:Game,pieceteam:Enums.TILETEAM,tilepiece:Enums.TILEPIECE,MapPostion:Vector2i) -> pawn:
 	var my_scene: PackedScene = preload("res://Scenes/pawn.tscn")
@@ -20,11 +19,15 @@ static func createObject(piecegame:Game,pieceteam:Enums.TILETEAM,tilepiece:Enums
 	newPiece.updateSprite()
 	return newPiece
 
+func _ready() -> void:
+	self.connect("piece_moved",checkEnPassantVulnerable)
+	self.game.connect("player_has_changed",checkEnPassantVulnerableReset)
+
 #override
 func getValidPosiiton()->Array:
 	self.ValidGridLocation = [] #set to empty
 	self.getPawnValidPosition()
-	#self.getValidEnPassant()
+	self.getValidEnPassant()
 
 	return self.ValidGridLocation
 	
@@ -44,15 +47,23 @@ func getValidEnPassant()->void:
 		if chosen_piece.piecetype == Enums.TILEPIECE.PAWN and self.isEnemy(chosen_piece.team):
 			var chosen_pawn:pawn = chosen_piece
 			if chosen_pawn.vulenerableFromEnPassant and self.isValidTile(left_move):
-				self.ValidGridLocation.appen(left_move)
+				self.ValidGridLocation.append(left_move)
 				
 	if self.game.PIECES_ON_BOARD.has(right_check):
 		var chosen_piece:piece = self.game.PIECES_ON_BOARD[right_check]
 		if chosen_piece.piecetype == Enums.TILEPIECE.PAWN and self.isEnemy(chosen_piece.team):
 			var chosen_pawn:pawn = chosen_piece
-			if chosen_pawn.vulenerableFromEnPassant and self.isValidTile(left_move):
-				self.ValidGridLocation.appen(left_move)
+			if chosen_pawn.vulenerableFromEnPassant and self.isValidTile(right_move):
+				self.ValidGridLocation.append(right_move)
 	
+func checkEnPassantVulnerable(PreviousMapPosition:Vector2i,NextMapPosition:Vector2i,args)->void:
+	#pawns are tricky and need extra logic	
+	var stepcount = abs(PreviousMapPosition.y-NextMapPosition.y)
+	self.vulenerableFromEnPassant = false
+	if self.firstMove and stepcount == 2:
+		self.vulenerableFromEnPassant = true
 
-				
-			
+func checkEnPassantVulnerableReset(currTeam:Enums.TILETEAM)->void:
+	if self.team == currTeam:
+		self.vulenerableFromEnPassant = false
+		

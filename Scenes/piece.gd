@@ -17,6 +17,7 @@ var beingDragged = false
 #var vulenerableFromEnPassant = false
 var hasMoved = false
 var firstMove = false
+var moveCounters:int = 0
 #var doublePawnMove = false
 
 func _ready() -> void:
@@ -32,7 +33,7 @@ func _process(delta: float) -> void:
 	#start dragging
 		if Input.is_action_pressed("leftMouseClick") and self.pieceCanBeDragged():
 			setBeingDragged()
-			self.set_scale(Vector2(0.8,0.8))
+			%Sprite2D.set_scale(Vector2(0.8,0.8))
 		
 		#release piece
 		if Input.is_action_just_released("leftMouseClick") and beingDragged:
@@ -40,16 +41,16 @@ func _process(delta: float) -> void:
 				var previousMapPosition = self.MapPosition
 				self.MapPosition = self.game.getGridLocationFromPosition(self.global_position)
 				self.global_position = self.game.getPositionFromGridLocation(self.MapPosition)
-				self.piece_moved.emit(previousMapPosition,self.MapPosition,self)
 				if self.hasMoved == false:
 					self.firstMove = true
 				else:
 					self.firstMove == false
 				self.hasMoved = true
+				self.piece_moved.emit(previousMapPosition,self.MapPosition,self)
 			else: 
 				self.global_position = self.game.getPositionFromGridLocation(self.MapPosition)
 				
-			self.set_scale(Vector2(1,1))
+			%Sprite2D.set_scale(Vector2(1,1))
 			self.beingDragged = false
 			GlobalVariables.canInitiateDragPiece = true
 			self.reset_valid_moves.emit()
@@ -57,7 +58,7 @@ func _process(delta: float) -> void:
 
 func _on_area_2d_mouse_entered() -> void:
 	print(self.game.PlayerTurn)
-	if !isEnemy(self.game.PlayerTurn):
+	if !isEnemy(self.game.PlayerTurn) and GlobalVariables.canInitiateDragPiece:
 		self.display_valid_moves.emit(self.getLegalMoves())
 		self.isOnHover = true
 

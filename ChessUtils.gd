@@ -150,3 +150,5 @@ static func isPawnPromotion(evokedPawn:pawn)->bool:
 		return true
 	else:
 		return false
+
+	

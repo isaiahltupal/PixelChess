@@ -1,5 +1,5 @@
 class_name EndScreen
-extends CanvasLayer
+extends Control
 
 
 # Called when the node enters the scene tree for the first time.
@@ -20,3 +20,17 @@ func display(team:Enums.TILETEAM, reason: Enums.END_REASON)->void:
 		%Team.text = "BLACK"
 	else:
 		%Team.text = "WHITE"
+		
+
+
+
+
+func _on_play_again_button_pressed() -> void:
+	var packed_game:PackedScene = preload("res://Scenes/game.tscn")
+	get_tree().change_scene_to_packed(packed_game)
+
+
+
+func _on_quit_button_pressed() -> void:
+	var packed_game:PackedScene = preload("res://Scenes/main_menu.tscn")
+	get_tree().change_scene_to_packed(packed_game)
