@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://b3rau0xx3cyph"]
+
+[ext_resource type="PackedScene" uid="uid://c01u34b3s3tl1" path="res://Scenes/howtoplay.tscn" id="1_foaun"]
+
+[node name="credits" instance=ExtResource("1_foaun")]
+
+[node name="Label" parent="Panel/VBoxContainer" index="0"]
+text = "Music, Art, and Programming by RedJassen"
+
+[node name="playAgainButton" parent="Panel/VBoxContainer" index="1"]
+visible = false

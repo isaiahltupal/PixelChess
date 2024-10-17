@@ -1,13 +1,13 @@
-[gd_scene load_steps=5 format=3 uid="uid://duhmm8irl0dej"]
+[gd_scene load_steps=6 format=3 uid="uid://duhmm8irl0dej"]
 
 [ext_resource type="Script" path="res://Scenes/game.gd" id="1_aw7ge"]
 [ext_resource type="PackedScene" uid="uid://d2fnbqh7dhuyj" path="res://Scenes/board.tscn" id="1_j17sq"]
 [ext_resource type="AudioStream" uid="uid://bcvg2ttk5p60s" path="res://Assets/audio/pixelchess.wav" id="3_3ijkr"]
 [ext_resource type="PackedScene" uid="uid://dys15tnkq8gnu" path="res://Scenes/background.tscn" id="4_k2d1f"]
+[ext_resource type="PackedScene" uid="uid://dabu7etvvd6bf" path="res://Scenes/hud.tscn" id="5_spm1k"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_aw7ge")
-debugMode = true
 
 [node name="Background" parent="." instance=ExtResource("4_k2d1f")]
 unique_name_in_owner = true
@@ -23,5 +23,11 @@ zoom = Vector2(2.3, 2.3)
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_3ijkr")
 autoplay = true
+
+[node name="HUD" parent="." instance=ExtResource("5_spm1k")]
+offset_left = -48.0
+offset_top = 64.0
+offset_right = -48.0
+offset_bottom = 64.0
 
 [connection signal="ready" from="board" to="." method="_on_board_ready"]

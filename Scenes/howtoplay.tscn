@@ -1,0 +1,38 @@
+[gd_scene load_steps=4 format=3 uid="uid://c01u34b3s3tl1"]
+
+[ext_resource type="PackedScene" uid="uid://dabu7etvvd6bf" path="res://Scenes/hud.tscn" id="1_dlqer"]
+[ext_resource type="Theme" uid="uid://c0q0w54400a2w" path="res://resources/theme.tres" id="2_udshp"]
+[ext_resource type="AudioStream" uid="uid://brx6rjti6dhpc" path="res://Assets/audio/main menu.wav" id="3_x3py7"]
+
+[node name="how to play" instance=ExtResource("1_dlqer")]
+
+[node name="Panel" parent="." index="0"]
+offset_left = -304.0
+offset_top = -212.0
+offset_right = 300.0
+offset_bottom = 135.0
+
+[node name="Label" type="Label" parent="Panel/VBoxContainer" index="0"]
+layout_mode = 2
+theme = ExtResource("2_udshp")
+theme_override_font_sizes/font_size = 23
+text = "how to play:
+Drag Pieces on valid tiles
+Sunrise background means it is white's turn
+Night background means it is black's turn
+"
+
+[node name="playAgainButton" parent="Panel/VBoxContainer" index="1"]
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 24
+text = "Play"
+
+[node name="quitButton" parent="Panel/VBoxContainer" index="2"]
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 24
+text = "Return to main menu"
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." index="1"]
+unique_name_in_owner = true
+stream = ExtResource("3_x3py7")
+autoplay = true
