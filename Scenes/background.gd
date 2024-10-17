@@ -36,7 +36,5 @@ func changeBackground(team:Enums.TILETEAM)->void:
 		spritePATH = "res://Assets/background/backgroundblack.png"
 	else:
 		spritePATH = "res://Assets/background/backgroundwhite.png"
-	image.load(spritePATH)
-	texture = ImageTexture.create_from_image(image)
-	%Sprite2D.texture = texture
+	%Sprite2D.texture = load(spritePATH)
 	self.resize()

@@ -11,7 +11,7 @@ var piecetype: Enums.TILEPIECE
 var MapPosition:Vector2i
 var game: Game
 var ValidGridLocation = []
-var spritePATH = "res://Assets/whitepiece.png"
+@export var spritePATH = "res://Assets/whitepiece.png"
 var isOnHover:bool = false
 var beingDragged = false
 #var vulenerableFromEnPassant = false
@@ -57,13 +57,12 @@ func _process(delta: float) -> void:
 			
 
 func _on_area_2d_mouse_entered() -> void:
-	print(self.game.PlayerTurn)
-	if !isEnemy(self.game.PlayerTurn) and GlobalVariables.canInitiateDragPiece:
+	if !isEnemy(self.game.PlayerTurn):
 		self.display_valid_moves.emit(self.getLegalMoves())
 		self.isOnHover = true
 
 func _on_area_2d_mouse_exited() -> void:
-	if !isEnemy(self.game.PlayerTurn):
+	if !isEnemy(self.game.PlayerTurn) and !self.beingDragged:
 		self.reset_valid_moves.emit()
 		self.isOnHover = false
 
@@ -170,7 +169,6 @@ func getBishopValidPosition()->void:
 
 func getKnightValidPosition()->void:
 	#just list all 8 of them
-
 	var lu = Vector2i(self.MapPosition.x-2,self.MapPosition.y-1)
 	var ul = Vector2i(self.MapPosition.x-1,self.MapPosition.y-2)
 	var ru = Vector2i(self.MapPosition.x+2,self.MapPosition.y-1)
@@ -252,11 +250,11 @@ func removeCheckableValidTiles()->void:
 
 func updateSprite() -> void:
 	if self.team != Enums.TILETEAM.NULL:
-		var image = Image.new()
-		var texture =ImageTexture.new()
-		image.load(self.spritePATH)
-		texture = ImageTexture.create_from_image(image)
-		%Sprite2D.texture = texture
+		#var image = Image.new()
+		#var texture =ImageTexture.new()
+		#image.load(self.spritePATH)
+		#texture = ImageTexture.create_from_image(image)
+		%Sprite2D.texture = load(self.spritePATH)
 		
 func pieceCanBeDragged() -> bool:
 	var mousePos = get_global_mouse_position()
